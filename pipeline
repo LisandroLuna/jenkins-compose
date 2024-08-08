@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
+
+    environment {
+        DOCKER_IMAGE_NAME = "lisandrodev/nginx-compose"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/LisandroLuna/nginx-compose.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        docker.image("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}").push()
+                        docker.image("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}").push("latest")
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker rmi ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}'
+        }
+    }
+}
