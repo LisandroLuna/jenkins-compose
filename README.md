@@ -28,8 +28,6 @@ https://docs.docker.com/engine/install/
    - Generar una clave SSH (si no tienes una):
 
    '''
-   sh
-   Copy code
    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
    '''
    - Agregar la clave pública (id_rsa.pub) al servidor remoto. Puedes añadirla al archivo ~/.ssh/authorized_keys en el servidor.
