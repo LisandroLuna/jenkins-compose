@@ -7,6 +7,10 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - "994"  # Replace with your host Docker group ID
+      # To get the ID use:
+      # getent group docker
 
 volumes:
   jenkins_home:
