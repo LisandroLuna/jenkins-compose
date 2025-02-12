@@ -57,3 +57,48 @@ Aguardamos que finalice.
 
    ![Verificar Plugin](https://www.jenkins.io/images/screenshots/manage_plugins/installed_plugins.png)
 
+
+-------
+
+## Docker agents
+
+### Instalar el Plugin de Docker en Jenkins
+
+Ir a Manage Jenkins → Manage Plugins → Instalar el Docker Plugin.
+
+### Configurar el Docker Cloud en Jenkins
+
+Ir a Manage Jenkins → Manage Nodes and Clouds → Configure Clouds.
+Hacer clic en Add a new cloud → Seleccionar Docker.
+
+Configurar el Docker Host URI como:
+unix:///var/run/docker.sock
+
+Hacer clic en Test Connection (debería ser exitosa).
+
+Hacer clic en Add Docker Template y configurar:
+
+- Labels: docker-agent
+- Docker image: jenkins/inbound-agent
+- Remote File System Root: /home/jenkins
+- Attach docker container
+- Docker Container Lifecycle: Establecer "Remove container when job completes"
+
+###onfigurar el Job de Jenkins para usar el Agente Docker
+
+Crear un nuevo Job de tipo Pipeline.
+Usar el siguiente script de pipeline:
+
+```
+pipeline {
+    agent { label 'docker-agent' }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Running inside Docker Agent!'
+            }
+        }
+    }
+}
+
+```
