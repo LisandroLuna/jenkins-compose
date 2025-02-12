@@ -84,7 +84,7 @@ Hacer clic en Add Docker Template y configurar:
 - Attach docker container
 - Docker Container Lifecycle: Establecer "Remove container when job completes"
 
-###onfigurar el Job de Jenkins para usar el Agente Docker
+### Configurar el Job de Jenkins para usar el Agente Docker
 
 Crear un nuevo Job de tipo Pipeline.
 Usar el siguiente script de pipeline:
